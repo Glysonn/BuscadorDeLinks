@@ -8,10 +8,13 @@ namespace backend.Context
 
         public MongoConnection (IConfiguration myConfig)
         {
+            var ConnectionString = myConfig["ConnectionStrings:MyMongoDBConnection"];
+            var DataBaseString = myConfig["MongoDatabases:BuscadorLinks"];
+
             try
             {
-                var MyMongoClient = new MongoClient(myConfig["ConnectionStrings:MyMongoDBConnection"]);
-                context = MyMongoClient.GetDatabase("BuscadorLinks");
+                var MyMongoClient = new MongoClient(ConnectionString);
+                context = MyMongoClient.GetDatabase(DataBaseString);
             }
             catch (Exception ex)
             {
