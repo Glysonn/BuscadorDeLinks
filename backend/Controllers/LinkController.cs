@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using backend.Models;
 using backend.Context;
 using System.Net;
+using MongoDB.Bson;
 
 namespace backend.Controllers
 {
@@ -11,14 +12,14 @@ namespace backend.Controllers
     public class LinkController : ControllerBase
     {
         // aqui é a minha collection do banco de dados
-        IMongoCollection<Link> _links;
+        IMongoCollection<Link> _linksCollection;
 
         public LinkController(MongoConnection myMongoConnection, IConfiguration configuration)
         {
             var CollectionString = configuration["MongoCollections:BuscadorLinks:Link"];
 
             // recuperando a collection do banco e atribuíndo à variável _links (o tipo dela é IMongoCollection)
-            _links = myMongoConnection.context.GetCollection<Link>(CollectionString);
+            _linksCollection = myMongoConnection.context.GetCollection<Link>(CollectionString);
         }
 
         // método para tratar os erros de forma genérica
@@ -37,12 +38,34 @@ namespace backend.Controllers
         {
             try
             {
-                var links = _links.AsQueryable().ToList();
+                var links = _linksCollection.AsQueryable().ToList();
                 if (links.Count() == 0)
                     return HandleError(HttpStatusCode.NotFound, "Oops! Ainda não há nenhum link cadastrado na nossa base de dados! :(");
+
                 return Ok(links);
             }
             catch (Exception ex)
+            {
+                return HandleError(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetLinkByTitle/{title}")]
+        public IActionResult GetLinkByTitle(string title)
+        {
+            try
+            {
+                // RegEx para trazer todos que contém a string passada pelo parâmetro. O "i" serve para que seja independente de CaseSensitive
+                var filtro = Builders<Link>.Filter.Regex(lk => lk.Titulo, new BsonRegularExpression(title, "i"));
+                var linkBanco =_linksCollection.Find(filtro).ToList();
+                
+                if (linkBanco.Count() == 0 || linkBanco == null)
+                    return HandleError(HttpStatusCode.NotFound, $"Perdão, mas não achamos nenhuma página que contenha esse nome ({title})");
+
+                return Ok(linkBanco);
+            }
+            catch(Exception ex)
             {
                 return HandleError(HttpStatusCode.InternalServerError, ex.Message);
             }
