@@ -99,5 +99,37 @@ namespace backend.Controllers
                 return HandleError(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [HttpPut]
+        [Route("EditLink/{url}")]
+        public IActionResult EditLink(string url, [FromBody] Link newLink)
+        {
+            try
+            {
+                var filtro = Builders<Link>.Filter.Eq(lk => lk.Url, url);
+                var linkBanco = _linksCollection.Find(filtro).FirstOrDefault();
+                
+                if (linkBanco == null)
+                    return HandleError(HttpStatusCode.NotFound, "Oops! Esse link não está cadastrado! Tente com um endereço válido!");
+                
+                var novoLink = new Link {
+                    Titulo = newLink.Titulo,
+                    Url = newLink.Url,
+                    Descricao = newLink.Descricao
+                };
+                novoLink.setId(linkBanco.Id);
+
+                var resultado = _linksCollection.ReplaceOne(filtro, novoLink);
+
+                if (!resultado.IsAcknowledged && resultado.ModifiedCount == 0)
+                    return HandleError(HttpStatusCode.InternalServerError, "Não foi possível atualizar o link!");
+
+                return Ok($"Dados atualizados! \n{novoLink.ToJson()}");
+            }
+            catch (Exception ex)
+            {
+                return HandleError(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }
