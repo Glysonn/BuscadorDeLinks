@@ -72,5 +72,32 @@ namespace backend.Controllers
                 return HandleError(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route("InsertNewLink")]
+        public IActionResult InsertNewLink([FromBody] Link newLink)
+        {
+            try
+            {
+                // verifica se os campos contém um valor que não seja vazio ou nulo. O MongoDB driver já verifica se é do tipo correto.
+                // caso contenha, retorna um status de erro
+                if((String.IsNullOrWhiteSpace(newLink.Titulo)) || (String.IsNullOrWhiteSpace(newLink.Url)) || (String.IsNullOrWhiteSpace(newLink.Descricao)))
+                    return HandleError(HttpStatusCode.BadRequest, "Oops! Todos os dados precisam ter um valor e não podem ser vazio!");
+                
+                // verifica se a URL já está cadastrada (é uma regra da aplicação, cada URL só pode ter um cadastro)
+                var filtro = Builders<Link>.Filter.Eq(lk => lk.Url, newLink.Url);
+                var urlEstaCadastrada = _linksCollection.Find(filtro).Any();
+
+                if (urlEstaCadastrada)
+                    return HandleError(HttpStatusCode.BadRequest, "Oops! Essa URL já está cadastrada e não pode ser cadastrada novamente.");
+
+                _linksCollection.InsertOne(newLink);
+                return Created("Link cadastrado!", newLink);
+            }
+            catch(Exception ex)
+            {
+                return HandleError(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }
