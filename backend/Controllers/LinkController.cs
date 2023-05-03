@@ -22,7 +22,7 @@ namespace backend.Controllers
         }
 
         // método para tratar os erros de forma genérica
-        public IActionResult HandleError(HttpStatusCode statusCode, string exceptionMessage)
+        private IActionResult HandleError(HttpStatusCode statusCode, string exceptionMessage)
         {
             return StatusCode((int)statusCode, new {
                 Error = Enum.GetName(typeof(HttpStatusCode), (int)statusCode),
@@ -30,14 +30,22 @@ namespace backend.Controllers
                 Details = exceptionMessage });
         }
 
-
-        // rota get somente para testar a API
+        // ENDPOINTS
         [HttpGet]
-        public IActionResult rotaTeste()
+        [Route("GetAllLinks")]
+        public IActionResult GetAllLinks()
         {
-            // somente para testar se a conexão está tudo funcionando 
-            var links = _links.AsQueryable().ToList();
-            return Ok(links);
+            try
+            {
+                var links = _links.AsQueryable().ToList();
+                if (links.Count() == 0)
+                    return HandleError(HttpStatusCode.NotFound, "Oops! Ainda não há nenhum link cadastrado na nossa base de dados! :(");
+                return Ok(links);
+            }
+            catch (Exception ex)
+            {
+                return HandleError(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }
