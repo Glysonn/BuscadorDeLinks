@@ -12,7 +12,6 @@ namespace backend.Models
         // propriedade readonly do _id
         public string Id { get {return _id;}}
         
-
         [BsonElement("titulo")]
         public string Titulo { get; set; }
 

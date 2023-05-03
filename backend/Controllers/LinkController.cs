@@ -5,6 +5,7 @@ using backend.Context;
 using System.Net;
 using MongoDB.Bson;
 
+
 namespace backend.Controllers
 {
     [ApiController]
@@ -13,6 +14,7 @@ namespace backend.Controllers
     {
         // aqui é a minha collection do banco de dados
         IMongoCollection<Link> _linksCollection;
+
 
         public LinkController(MongoConnection myMongoConnection, IConfiguration configuration)
         {
