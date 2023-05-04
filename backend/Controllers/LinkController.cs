@@ -58,10 +58,14 @@ namespace backend.Controllers
         {
             try
             {
+                // verifica se o parâmetro (título) é vazio ou nulo, caso seja, deve retornar dizendo o motivo do erro
+                if (String.IsNullOrEmpty(title))
+                    return HandleError(HttpStatusCode.BadRequest, "Oops! Parece que você não digitou nada! Por favor, digite um título");
+
                 // RegEx para trazer todos que contém a string passada pelo parâmetro. O "i" serve para que seja independente de CaseSensitive
                 var filtro = Builders<Link>.Filter.Regex(lk => lk.Titulo, new BsonRegularExpression(title, "i"));
                 var linkBanco =_linksCollection.Find(filtro).ToList();
-                
+
                 if (linkBanco.Count() == 0 || linkBanco == null)
                     return HandleError(HttpStatusCode.NotFound, $"Perdão, mas não achamos nenhuma página que contenha esse nome ({title})");
 
@@ -106,6 +110,10 @@ namespace backend.Controllers
         {
             try
             {
+                // verifica se o parâmetro (url) é vazio ou nulo, caso seja, deve retornar dizendo o motivo do erro
+                if (String.IsNullOrEmpty(url))
+                    return HandleError(HttpStatusCode.BadRequest, "A url não pode ser vazia! Tente novamente!");
+
                 var filtro = Builders<Link>.Filter.Eq(lk => lk.Url, url);
                 var linkBanco = _linksCollection.Find(filtro).FirstOrDefault();
                 
@@ -130,6 +138,31 @@ namespace backend.Controllers
             {
                 return HandleError(HttpStatusCode.InternalServerError, ex.Message);
             }
+        }
+
+        [HttpDelete]
+        [Route("DeleteLink/{url}")]
+        public IActionResult DeleteLinkByUrl(string url)
+        {
+            try
+            {
+                // verifica se o parâmetro (url) é vazio ou nulo, caso seja, deve retornar dizendo o motivo do erro
+                if (String.IsNullOrEmpty(url))
+                    return HandleError(HttpStatusCode.BadRequest, "A url não pode ser vazia! Tente novamente!");
+                
+                var filtro = Builders<Link>.Filter.Eq(lk => lk.Url, url);
+                var linkASerDeletado = _linksCollection.FindOneAndDelete(filtro);
+
+                if (linkASerDeletado is null)
+                    return HandleError(HttpStatusCode.NotFound, "Oops! Esse link não se encontra cadastrado!");
+
+                return Ok($"O link foi deletado!");
+            }
+            catch (Exception ex)
+            {
+                return HandleError(HttpStatusCode.InternalServerError, ex.Message);
+            }
+            
         }
     }
 }
