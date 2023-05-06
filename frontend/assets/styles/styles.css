@@ -1,0 +1,139 @@
+/* BARRA DE PESQUISA */
+
+body {
+  background-color: #444; 
+  background-size: cover;
+}
+
+.search {
+  width: 90%;
+  max-width: 500px;
+  height: 40px;
+  margin: 50px auto;
+  background: #444;
+  border-radius: 24px;
+  border: 1px solid #5f6368;
+  align-items: center;
+}
+
+.search input {
+  width: 70%;
+  padding: 10px 5px;
+  float: left;
+  color: rgb(255, 247, 247);
+  background: transparent;
+  border: 0px;
+}
+
+.search input:focus {
+  outline: 0;
+  background: transparent;
+}
+
+.search button {
+  position: relative;
+  float: right;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  height: 40px;
+  width: 25%;
+  max-width: 120px;
+  color: #fff;
+  background: transparent;
+  border-left: 1px solid rgb(145, 139, 139);
+  border-radius: 0 3px 3px 0;
+}
+
+.search button:hover {
+  background: rgb(139, 132, 132);
+  color: #444;
+  background: transparent;
+}
+
+.search button:active {
+  box-shadow: 0px 0px 12px 0px rgba(225, 225, 225, 1);
+}
+
+.search button:focus {
+  outline: 0;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#logoGlyson {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  width: auto;
+  margin-top: 50%;
+}
+
+#logoGlyson[style] {
+  height: 92px;
+  aspect-ratio: auto 272 / 92;
+  width: 272px;
+}
+
+#logoGlyson {
+  overflow-clip-margin: content-box;
+  overflow: clip;
+}
+
+
+/* REGISTRAR NOVO SITE */
+
+.register-button {
+  position: relative;
+  top: 0;
+  right: 0;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #303134;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  margin: 15px;
+  
+}
+
+.register-button:hover {
+  background-color: #57595fef;
+}
+
+
+/* Media queries para dispositivos móveis */
+
+@media only screen and (max-width: 600px) {
+  .search {
+    width: 90%;
+    max-width: none;
+    height: 40px;
+    margin: 50px auto;
+  }
+
+  .search input {
+    width: 70%;
+  }
+
+  .search button {
+    width: 25%;
+    max-width: none;
+  }
+
+  #logoGlyson[style] {
+    height: 50px;
+    aspect-ratio: auto 272 / 50;
+    width: 100%;
+  }
+}
