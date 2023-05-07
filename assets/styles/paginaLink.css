@@ -1,0 +1,108 @@
+body {
+    background-color: #202124; 
+    background-size: cover;
+  }
+
+  .search {
+    width: 90%;
+    max-width: 500px;
+    height: 40px;
+    background: #303134;
+    margin: 0.3% 0px 0px 3%;
+    border-radius: 24px;
+    align-items: center;
+  }
+  
+  .search input {
+    width: 70%;
+    padding: 10px 5px;
+    float: left;
+    color: rgb(255, 247, 247);
+    background: transparent;
+    border: 0px;
+  }
+  
+  .search input:focus {
+    outline: 0;
+    background: transparent;
+  }
+  
+  .search button {
+    position: relative;
+    float: right;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    height: 40px;
+    width: 25%;
+    max-width: 120px;
+    color: #fff;
+    background: transparent;
+    border-left: 1px solid rgb(145, 139, 139);
+    border-radius: 0 3px 3px 0;
+  }
+  
+  .search button:hover {
+    background: rgb(139, 132, 132);
+    color: #444;
+    background: transparent;
+  }
+  
+  .search button:active {
+    box-shadow: 0px 0px 12px 0px rgba(225, 225, 225, 1);
+  }
+  
+  .search button:focus {
+    outline: 0;
+  }
+
+
+#headerPesquisa {
+    display: flex;
+    margin-top: 30px;
+    margin-left: 3%;
+}
+
+
+/* Estilos para a lista de links */
+#Links {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#LinksBuscados {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#LinksBuscados li {
+  margin-bottom: 10px;
+  margin-left: -10px;
+  font-family: Arial, sans-serif;
+}
+
+#LinksBuscados li a {
+  color: #8ab4f8;
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,.1);
+  font-size: 20px;
+  font-weight: 400;
+}
+
+#LinksBuscados li .url {
+  font-size: 12px;
+  color: #bdc1c6;
+  margin-right: 5px;
+}
+
+#LinksBuscados li .description {
+  color: #bdc1c6;
+  font-size: 14px;
+}
+
+#LinksBuscados li .link-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
