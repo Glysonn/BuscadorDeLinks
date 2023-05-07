@@ -24,7 +24,34 @@ fetch(`http://localhost:5043/api/Link/GetLinkByTitle/${searchQuery}`)
       `;
     });
   })
-  .catch(error => console.error(error));
-
-
-
+  .catch(error => {
+    let errorMessage = `
+      <div class="error">
+        <p>Oops! Ocorreu um erro interno no servidor!</p>
+        <br>
+        <p>Por favor, tente mais tarde.</p>
+      </div>`;
+    console.log("Ocorreu um erro: ", error.message);
+    if (error.message === "data.forEach is not a function") {
+      errorMessage = `
+        <div class="error">
+          <p>Sua pesquisa - <b>${searchQuery}</b> - não bate com nenhum dos links cadastrados.</p>
+          <br>
+          <p>Sugestões:</p>
+          <ul>
+            <li>
+              Tenha certeza que você digitou corretamente.
+            </li>
+            <li>
+              Tente diferentes palavras chaves
+            </li>
+            <li>
+              Tente palavras chaves mais gerais
+            </li>
+          </ul>
+        </div>
+      `;
+    }
+    const resultList = document.querySelector('#ErrorDiv');
+    resultList.innerHTML = errorMessage;
+  });
